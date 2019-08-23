@@ -6,6 +6,14 @@ It reads a configuration file containing a GitHub organisation (not yet supporte
 
 To get started, create a configuration file and pass the --config option.
 
+- [Installation](#installation)
+- [Usage](#usage)
+  - [GitLab](#gitlab)
+    - [Project settings](#project-settings)
+    - [Project integrations](#project-integrations)
+      - [Slack](#slack)
+- [License & Authors](#license--authors)
+
 ## Installation
 
 At some later point pre-built binaries will be available. Until then you will need to build it manually.
