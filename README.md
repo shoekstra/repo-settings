@@ -127,7 +127,7 @@ The following GitLab project capabilities are able to be configured:
 
 Below you find planned features, as they're completed they'll move to the section above.
 
-Have an idea for a feature? Create a pull request that adds it to the list below.
+Have a configuration or feature you'd like to see supported? Create a pull request that adds it to the list below.
 
 ### GitLab
 
