@@ -1,4 +1,4 @@
-# repo-settings
+# repo-settings <!-- omit in toc -->
 
 A CLI to configure repository settings across various repository hosters.
 
@@ -8,7 +8,11 @@ Currently supported hosters:
 
 ## Why?
 
-When using GitLab or GitHub there are many project/repository settings you cannot set at group or organisation level. This tool aims to solve that problem by letting you specify project/repository configurations in a config file and target a GitLab group or GitHub organisation. It will then look up all projects/repositories under that group or organisation and apply the specified config to each.
+When using GitLab or GitHub there are many project/repository settings you cannot set at group or organisation level.
+
+This aims to solve that problem by letting you specify project/repository configurations in a config file and target a GitLab group or GitHub organisation. It will then look up all projects/repositories under that group or organisation and apply the specified config to each.
+
+* *Note*: if a configuration can be found as a group or organisation option, it will not be supported here. This ensures the scope of this tool is only to apply settings to projects or repositories that cannot be done at group or organisation level.
 
 - [Why?](#why)
 - [Installation](#installation)
@@ -66,7 +70,7 @@ Coming soon!
 
 The project integration settings are split into two parts, the Service section and the Integration Properties section.
 
-For example:
+In the example below, everything defined under the `slack` key are generic Service settings, whilst everything under the `properties` key are specific to the Slack integration:
 
 ```YAML
 slack:
@@ -79,24 +83,30 @@ slack:
     username: GitLab
 ```
 
-Everything defined under the `slack` key are generic Service settings, whilst everything under the `properties` key are specific to the Slack integration.
+All integrations contain an `active` option, which should be set to `true` to enable the integration. As this tool does not delete/remove configurations it doesn't manage, an easy way to disable an integration is set `active` to `false`.
 
-Generic Service settings that apply to all integrations:
+In most cases what changes between integration is which triggers are supported; each integration will list it's supported trigger events. That said. there are some integrations which do not support events and can only be configured by it's properties, as will be shown in their examples.
 
-| key    | description                                                     | valid settings                                            |
+Generic Service settings for integrations:
+
+| key    | description                                                     | possible settings                                         |
 | ------ | --------------------------------------------------------------- | --------------------------------------------------------- |
 | active | Determines if an integration is enabled                         | `true`, `false`                                           |
 | events | Events that will trigger the integration, specified as an array | `["issues", "merge_request", "pipeline", "push", "tags"]` |
-
-With this in mind, integration settings shown below in this section only apply to the `properties` key within the integration section.
 
 ##### Slack
 
 Example:
 
 ```YAML
-webhook: https://hooks.slack.com/services/T04...
-username: GitLab
+slack:
+  active: true
+  events:
+    - merge_request
+    - pipeline
+  properties:
+    webhook: https://hooks.slack.com/services/T04...
+    username: GitLab
 ```
 
 ## Usage
@@ -121,7 +131,8 @@ repo-settings --config config.yaml
 
 The following GitLab project capabilities are able to be configured:
 
-* Slack integration
+* integrations:
+  * Slack
 
 ## Roadmap
 
