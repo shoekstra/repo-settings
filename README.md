@@ -143,7 +143,8 @@ Have a configuration or feature you'd like to see supported? Create a pull reque
 ### GitLab
 
 * Branch protection
-* Required approvers
+* Merge request approvals
+* Merge request settings
 
 ## License & Authors
 
