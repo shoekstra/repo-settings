@@ -6,15 +6,10 @@ Currently supported hosters:
 
 * GitLab
 
-## Why?
-
-When using GitLab or GitHub there are many project/repository settings you cannot set at group or organisation level.
-
-This aims to solve that problem by letting you specify project/repository configurations in a config file and target a GitLab group or GitHub organisation. It will then look up all projects/repositories under that group or organisation and apply the specified config to each.
-
-* *Note*: if a configuration can be found as a group or organisation option, it will not be supported here. This ensures the scope of this tool is only to apply settings to projects or repositories that cannot be done at group or organisation level.
+## Contents <!-- omit in toc -->
 
 - [Why?](#why)
+- [How does it work?](#how-does-it-work)
 - [Installation](#installation)
 - [Configuration](#configuration)
   - [GitLab](#gitlab)
@@ -27,6 +22,30 @@ This aims to solve that problem by letting you specify project/repository config
 - [Roadmap](#roadmap)
   - [GitLab](#gitlab-2)
 - [License & Authors](#license--authors)
+
+## Why?
+
+When using GitLab or GitHub there are many project/repository settings you cannot set at group or organisation level.
+
+This aims to solve that problem by letting you specify project/repository configurations in a config file and target a GitLab group or GitHub organisation and apply the config to each project/repository found.
+
+*Note*: if a configuration can be found as a group or organisation option, it will not be supported here. This ensures the scope of this tool is only to apply settings to projects or repositories that cannot be done at group or organisation level.
+
+## How does it work?
+
+`repo-settings` takes settings in a config file and applies them to projects/repositorys found under a group or organisation.
+
+It runs a few phases per project/repository found:
+
+1. Project configuration or integration settings are stored in an object
+2. This object is copied and project configuration or integration settings from the config file are applied on top of the stored object
+3. If the original object and copied object differ, it is updated with the copied object
+
+This means only settings in the config file are applied.
+
+To give an example of this, if you have GitLab project with the Slack integration enabled and you have the Pipeline, Push and Tags events selected, and in your config file you only specify `pipeline` and `tags`, the Push event will not be disabled. `repo-settings` only ensures that what you have specified is configured, it does not ensure the state of a project/repository's settings or it's integration settings.
+
+If you are looking for a way to configure all settings across your projects/repositories, and to ensure the state of these, you are better off using a [Terraform](https://www.terraform.io/) module to apply these configurations.
 
 ## Installation
 
