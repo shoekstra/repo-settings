@@ -17,19 +17,19 @@ COPY . .
 
 RUN go mod download
 RUN go mod verify
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /repo-settings
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /bin/repo-settings
 
 ### Step 2 - build app image
 
 FROM scratch
 
 # Import from builder
+COPY --from=builder /bin/repo-settings /bin/repo-settings
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /repo-settings /repo-settings
 
 # Use an unprivileged user
 USER repo-settings
 
 # Run our app
-ENTRYPOINT ["/repo-settings"]
+ENTRYPOINT ["/bin/repo-settings"]
