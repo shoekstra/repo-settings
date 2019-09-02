@@ -17,6 +17,7 @@ Currently supported hosters:
     - [Project integrations](#project-integrations)
       - [Slack](#slack)
 - [Usage](#usage)
+- [Docker](#docker)
 - [Features](#features)
   - [GitLab](#gitlab-1)
 - [Roadmap](#roadmap)
@@ -142,6 +143,14 @@ Apply your settings:
 
 ```bash
 repo-settings --config config.yaml
+```
+
+## Docker
+
+If familiar with Docker you can use the `shoekstra/repo-settings` image, assuming you already have your variables exported locally:
+
+```bash
+docker run -it --rm -e GITLAB_TOKEN=${GITLAB_TOKEN} -e GITLAB_URL=${GITLAB_URL} -v $(pwd):/app shoekstra/repo-settings:latest -c /app/config.yaml
 ```
 
 ## Features
