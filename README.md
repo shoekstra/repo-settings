@@ -54,7 +54,7 @@ At some point pre-built binaries will be available. Until then you will need to 
 This project uses Go modules, so a minimum version of Go 1.11 is required to build the binary.
 
 1. Clone this repository
-2. `go build -o repo-settings`
+2. Build it: `go mod download && go mod verify && go build -o repo-settings`
 
 ## Configuration
 
