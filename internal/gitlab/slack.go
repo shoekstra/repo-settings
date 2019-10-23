@@ -72,37 +72,39 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 	newSlack.CreatedAt = projectSlack.CreatedAt
 	newSlack.UpdatedAt = projectSlack.UpdatedAt
 
-	if !compareObjects(projectSlack, newSlack) {
-		fmt.Printf("Project %s's Slack settings need updating ... ", p.Name)
-
-		if dryRun {
-			fmt.Printf("skipping because this is a dry run\n")
-			return nil
-		}
-
-		opts := &gitlab.SetSlackServiceOptions{}
-
-		svcData, _ := json.Marshal(newSlack.Service)
-		if err := json.Unmarshal(svcData, &opts); err != nil {
-			return err
-		}
-
-		propData, _ := json.Marshal(newSlack.Properties)
-		if err := json.Unmarshal(propData, &opts); err != nil {
-			return err
-		}
-
-		fmt.Printf("Updating project ... ")
-
-		_, err := client.Services.SetSlackService(p.ID, opts)
-		if err != nil {
-			return err
-		}
-		fmt.Printf("Success!\n")
-
-	} else {
+	// Return if our proposed config matches the actual config
+	if compareObjects(projectSlack, newSlack) {
 		fmt.Printf("Project %s's Slack settings doesn't need updating\n", p.Name)
+
+		return nil
 	}
+
+	fmt.Printf("Project %s's Slack settings need updating ... ", p.Name)
+
+	if dryRun {
+		fmt.Printf("skipping because this is a dry run\n")
+		return nil
+	}
+
+	opts := &gitlab.SetSlackServiceOptions{}
+
+	svcData, _ := json.Marshal(newSlack.Service)
+	if err := json.Unmarshal(svcData, &opts); err != nil {
+		return err
+	}
+
+	propData, _ := json.Marshal(newSlack.Properties)
+	if err := json.Unmarshal(propData, &opts); err != nil {
+		return err
+	}
+
+	fmt.Printf("Updating project ... ")
+
+	_, err := client.Services.SetSlackService(p.ID, opts)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Success!\n")
 
 	return nil
 }

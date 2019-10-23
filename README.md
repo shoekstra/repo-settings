@@ -14,6 +14,8 @@ Currently supported hosters:
 - [Configuration](#configuration)
   - [GitLab](#gitlab)
     - [Project settings](#project-settings)
+      - [General](#general)
+        - [Merge Request Approvals](#merge-request-approvals)
     - [Project integrations](#project-integrations)
       - [Slack](#slack)
 - [Usage](#usage)
@@ -84,7 +86,19 @@ This section details how to configure GitLab repository settings.
 
 #### Project settings
 
-Coming soon!
+##### General
+
+###### Merge Request Approvals
+
+This section configures the "Merge Request Approvals" options found under "General" settings.
+
+Example:
+
+```YAML
+general:
+  mergerequestapprovals:
+    approvalsbeforemerge: 2
+```
 
 #### Project integrations
 

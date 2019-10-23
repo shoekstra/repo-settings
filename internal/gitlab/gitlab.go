@@ -35,7 +35,10 @@ type Config struct {
 
 // Settings represents a group's settings.
 type Settings struct {
-	Name         string `json:"name,omitempty"`
+	Name    string `json:"name,omitempty"`
+	General struct {
+		MergeRequestApprovals gitlab.ProjectApprovals `json:"merge_request_approvals,omitempty"`
+	} `json:"general,omitempty"`
 	Integrations struct {
 		Slack SlackSettings `json:"slack,omitempty"`
 	} `json:"integrations,omitempty"`
@@ -66,6 +69,30 @@ func (c *Config) LoadCreds(token, url string) error {
 	c.APIURL = &url
 
 	return nil
+}
+
+// MergeRequestApprovalSettings will return the Merge Request Approval settings
+// for a project by looking up it's namespace in the config.
+func (c *Config) MergeRequestApprovalSettings(ns string) gitlab.ProjectApprovals {
+	for {
+		// Loop through groups and return configured Slack Settings.
+		for _, g := range c.Groups {
+			if strings.EqualFold(g.Name, ns) {
+				return g.General.MergeRequestApprovals
+			}
+		}
+
+		// Pop last name in namespace before trying again.
+		s := strings.Split(ns, "/")
+		if len(s) == 1 {
+			break
+		}
+		ns = strings.Join(s[:len(s)-1], "/")
+	}
+
+	// This should never happen as we only look up settings for projects
+	// we've already found.
+	return gitlab.ProjectApprovals{}
 }
 
 // SlackSettings will return the Slack settings for a project by looking up
