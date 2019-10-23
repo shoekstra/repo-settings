@@ -68,7 +68,7 @@ func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project
 
 	fmt.Printf("Updating project ... ")
 
-	_, _, err := client.Projects.ChangeApprovalConfiguration(p.ID, opts)
+	_, _, err = client.Projects.ChangeApprovalConfiguration(p.ID, opts)
 	if err != nil {
 		return err
 	}
