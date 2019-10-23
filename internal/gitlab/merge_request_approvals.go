@@ -40,6 +40,10 @@ func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project
 		return err
 	}
 
+	// Set defaults, otherwise these will be set as nil values causing the compare to always fail.
+	newSettings.Approvers = []*gitlab.MergeRequestApproverUser{}
+	newSettings.ApproverGroups = []*gitlab.MergeRequestApproverGroup{}
+
 	// Merge our changes on top of existing settings.
 	if err := mergo.Merge(newSettings, projectSettings, mergo.WithOverride); err != nil {
 		return err
