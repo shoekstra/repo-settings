@@ -113,7 +113,13 @@ func UpdateProjectsInGroups(cfg *Config, dryRun bool) error {
 			}
 
 			for _, p := range ps {
-				// Update Slack integration
+				// General settings
+				// - Update Merge Request Approval settings
+				if err := updateMergeRequestAppovalsSettings(client, p, cfg, dryRun); err != nil {
+					return err
+				}
+				// Integrations
+				// - Update Slack integration
 				if err := updateSlackService(client, p, cfg, dryRun); err != nil {
 					return err
 				}
