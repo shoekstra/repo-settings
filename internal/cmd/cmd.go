@@ -26,8 +26,8 @@ import (
 )
 
 var dryRun bool
-var glAPIToken string
-var glAPIURL string
+var gitlabToken string
+var gitlabURL string
 var cfgFile string
 
 // NewRepoDefaultsCmd represents the command
@@ -54,8 +54,8 @@ To get started, create a configuration file and pass the --config option.`,
 
 	// Add some flags.
 	cmd.Flags().BoolVarP(&dryRun, "dry-drun", "d", false, "perform a dry run")
-	cmd.Flags().StringVar(&glAPIToken, "gitlab-token", "", "GitLab API token")
-	cmd.Flags().StringVar(&glAPIURL, "gitlab-url", "", "GitLab API URL")
+	cmd.Flags().StringVar(&gitlabToken, "gitlab-token", "", "GitLab API token")
+	cmd.Flags().StringVar(&gitlabURL, "gitlab-url", "", "GitLab API URL")
 	cmd.Flags().StringVarP(&cfgFile, "config", "c", "", "path to config file")
 
 	return cmd
@@ -72,17 +72,9 @@ func runCmd() error {
 	}
 
 	if cfg.GitLab != nil {
-		// Use env var if value not passed using a flag.
-		if glAPIToken == "" {
-			glAPIToken = os.Getenv("GITLAB_TOKEN")
+		if err := cfg.GitLab.LoadCreds(gitlabToken, gitlabURL); err != nil {
+			return err
 		}
-		cfg.GitLab.APIToken = &glAPIToken
-
-		// Use env var if value not passed using a flag.
-		if glAPIURL == "" {
-			glAPIURL = os.Getenv("GITLAB_URL")
-		}
-		cfg.GitLab.APIURL = &glAPIURL
 
 		// Update projects in configured groups.
 		if cfg.GitLab.Groups != nil {
