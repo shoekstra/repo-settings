@@ -185,7 +185,7 @@ Have a configuration or feature you'd like to see supported? Create a pull reque
 ### GitLab
 
 * Branch protection
-* Merge request approvals
+* <s>Merge request approvals</s> ([#2](https://github.com/shoekstra/repo-settings/pull/2))
 * Merge request settings
 
 ## License & Authors
