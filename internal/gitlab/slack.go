@@ -72,7 +72,7 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 	newSlack.CreatedAt = projectSlack.CreatedAt
 	newSlack.UpdatedAt = projectSlack.UpdatedAt
 
-	if compareObjects(projectSlack, newSlack) == false {
+	if !compareObjects(projectSlack, newSlack) {
 		fmt.Printf("Project %s's Slack settings need updating ... ", p.Name)
 
 		if dryRun {
@@ -82,13 +82,11 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 
 		opts := &gitlab.SetSlackServiceOptions{}
 
-		// svcData := []byte{}
 		svcData, _ := json.Marshal(newSlack.Service)
 		if err := json.Unmarshal(svcData, &opts); err != nil {
 			return err
 		}
 
-		// propData := []byte{}
 		propData, _ := json.Marshal(newSlack.Properties)
 		if err := json.Unmarshal(propData, &opts); err != nil {
 			return err

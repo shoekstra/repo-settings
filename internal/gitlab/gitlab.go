@@ -18,6 +18,7 @@ package gitlab
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"strings"
 
@@ -42,13 +43,33 @@ type Settings struct {
 
 // SlackSettings represents a project's Slack settings.
 type SlackSettings struct {
-	Active     bool                           `json:"active"`
-	Events     []string                       `json:"events"`
-	Properties *gitlab.SlackServiceProperties `json:"properties,omitempty"`
+	Active     bool                          `json:"active"`
+	Events     []string                      `json:"events"`
+	Properties gitlab.SlackServiceProperties `json:"properties,omitempty"`
 }
 
-// SlackSettings will return the Slack settings for a project by looking up the
-// it's name space in the config.
+// LoadCreds accepts a token and url string; if these are empty it will attempt
+// read the GITLAB_TOKEN and GITLAB_URL env vars as a source for credentials. If
+// these are also empty it returns an error.
+func (c *Config) LoadCreds(token, url string) error {
+	if token == "" {
+		token = os.Getenv("GITLAB_TOKEN")
+	}
+	if url == "" {
+		url = os.Getenv("GITLAB_URL")
+	}
+	if token == "" || url == "" {
+		return fmt.Errorf("Missing required API token and/or URL params")
+	}
+
+	c.APIToken = &token
+	c.APIURL = &url
+
+	return nil
+}
+
+// SlackSettings will return the Slack settings for a project by looking up
+// it's namespace in the config.
 func (c *Config) SlackSettings(ns string) SlackSettings {
 	for {
 		// Loop through groups and return configured Slack Settings.
@@ -72,15 +93,10 @@ func (c *Config) SlackSettings(ns string) SlackSettings {
 }
 
 // newClient returns a configured GitLab client.
-func newClient(apiToken, apiURL string) (*gitlab.Client, error) {
-	// Test API token and URL params are configured
-	if apiToken == "" && apiURL == "" {
-		return nil, fmt.Errorf("Missing required API token and/or URL params")
-	}
-
-	client := gitlab.NewClient(nil, apiToken)
-	if apiURL != "" {
-		client.SetBaseURL(apiURL)
+func newClient(token, url string) (*gitlab.Client, error) {
+	client := gitlab.NewClient(nil, token)
+	if url != "" {
+		client.SetBaseURL(url)
 	}
 
 	return client, nil
