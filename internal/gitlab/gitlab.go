@@ -43,9 +43,9 @@ type Settings struct {
 
 // SlackSettings represents a project's Slack settings.
 type SlackSettings struct {
-	Active     bool                           `json:"active"`
-	Events     []string                       `json:"events"`
-	Properties *gitlab.SlackServiceProperties `json:"properties,omitempty"`
+	Active     bool                          `json:"active"`
+	Events     []string                      `json:"events"`
+	Properties gitlab.SlackServiceProperties `json:"properties,omitempty"`
 }
 
 // LoadCreds accepts a token and url string; if these are empty it will attempt

@@ -33,7 +33,7 @@ type Config struct {
 // Load reads a config file and returns an initialised Config object.
 func Load(path string) (*Config, error) {
 	ext := strings.TrimPrefix(filepath.Ext(path), ".")
-	if valid := contains([]string{"json", "yaml", "yml"}, ext); valid == false {
+	if ok := contains([]string{"json", "yaml", "yml"}, ext); !ok {
 		return nil, fmt.Errorf("Unsupported config type \"%s\"", ext)
 	}
 
