@@ -100,7 +100,7 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 
 	fmt.Printf("Updating project ... ")
 
-	_, err := client.Services.SetSlackService(p.ID, opts)
+	_, err = client.Services.SetSlackService(p.ID, opts)
 	if err != nil {
 		return err
 	}
