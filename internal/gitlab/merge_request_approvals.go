@@ -26,13 +26,18 @@ import (
 )
 
 func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project, cfg *Config, dryRun bool) error {
+	// Fetch Merge Request Approval settings from config file and return if a nil object is returned.
+	cfgSettings := cfg.MergeRequestApprovalSettings(p.Namespace.FullPath)
+	if compareObjects(cfgSettings, &gitlab.ProjectApprovals{}) {
+		return nil
+	}
+
 	// Fetch current Merge Request Approval settings.
 	projectSettings, _, err := client.Projects.GetApprovalConfiguration(p.ID)
 	if err != nil {
 		return nil
 	}
 
-	cfgSettings := cfg.MergeRequestApprovalSettings(p.Namespace.FullPath)
 	// Populate newSettings with cfgSettings values, we do this otherwise mergo.Merge wigs out and raises
 	// an exception.
 	newSettings := &gitlab.ProjectApprovals{}
@@ -51,7 +56,7 @@ func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project
 
 	// Return if our proposed config matches the actual config
 	if compareObjects(projectSettings, newSettings) {
-		fmt.Printf("Project %s's Slack settings doesn't need updating\n", p.Name)
+		fmt.Printf("Project %s's Merge Request Approval settings don't need updating\n", p.Name)
 
 		return nil
 	}

@@ -73,12 +73,12 @@ func (c *Config) LoadCreds(token, url string) error {
 
 // MergeRequestApprovalSettings will return the Merge Request Approval settings
 // for a project by looking up it's namespace in the config.
-func (c *Config) MergeRequestApprovalSettings(ns string) gitlab.ProjectApprovals {
+func (c *Config) MergeRequestApprovalSettings(ns string) *gitlab.ProjectApprovals {
 	for {
 		// Loop through groups and return configured Slack Settings.
 		for _, g := range c.Groups {
 			if strings.EqualFold(g.Name, ns) {
-				return g.General.MergeRequestApprovals
+				return &g.General.MergeRequestApprovals
 			}
 		}
 
@@ -92,17 +92,17 @@ func (c *Config) MergeRequestApprovalSettings(ns string) gitlab.ProjectApprovals
 
 	// This should never happen as we only look up settings for projects
 	// we've already found.
-	return gitlab.ProjectApprovals{}
+	return nil
 }
 
 // SlackSettings will return the Slack settings for a project by looking up
 // it's namespace in the config.
-func (c *Config) SlackSettings(ns string) SlackSettings {
+func (c *Config) SlackSettings(ns string) *SlackSettings {
 	for {
 		// Loop through groups and return configured Slack Settings.
 		for _, g := range c.Groups {
 			if strings.EqualFold(g.Name, ns) {
-				return g.Integrations.Slack
+				return &g.Integrations.Slack
 			}
 		}
 
@@ -116,7 +116,7 @@ func (c *Config) SlackSettings(ns string) SlackSettings {
 
 	// This should never happen as we only look up settings for projects
 	// we've already found.
-	return SlackSettings{}
+	return nil
 }
 
 // newClient returns a configured GitLab client.
@@ -133,14 +133,4 @@ func newClient(token, url string) (*gitlab.Client, error) {
 // if they don't.
 func compareObjects(a, b interface{}) bool {
 	return reflect.DeepEqual(a, b)
-}
-
-// contains checks a slice for a string and returns true if found.
-func contains(s []string, str string) bool {
-	for _, n := range s {
-		if str == n {
-			return true
-		}
-	}
-	return false
 }
