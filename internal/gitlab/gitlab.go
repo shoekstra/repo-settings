@@ -134,13 +134,3 @@ func newClient(token, url string) (*gitlab.Client, error) {
 func compareObjects(a, b interface{}) bool {
 	return reflect.DeepEqual(a, b)
 }
-
-// contains checks a slice for a string and returns true if found.
-func contains(s []string, str string) bool {
-	for _, n := range s {
-		if str == n {
-			return true
-		}
-	}
-	return false
-}
