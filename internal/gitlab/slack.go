@@ -26,8 +26,14 @@ import (
 )
 
 func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, dryRun bool) error {
+	// Fetch Slack Service settings from config file and return if a nil object is returned.
+	cfgSettings := cfg.SlackSettings(p.Namespace.FullPath)
+	if compareObjects(cfgSettings, &SlackSettings{}) {
+		return nil
+	}
+
 	// Fetch current Slack Service settings and properties.
-	projectSlack, _, err := client.Services.GetSlackService(p.ID)
+	projectSettings, _, err := client.Services.GetSlackService(p.ID)
 	if err != nil {
 		return nil
 	}
@@ -35,31 +41,30 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 	// Create a gitlab.SlackService object with our desired service and properties by
 	// taking what is current and applying our changes on top, thus we do not override
 	// any settings that we don't define in our config.
-	cfgSlack := cfg.SlackSettings(p.Namespace.FullPath)
-	newSlack := &gitlab.SlackService{}
-	if err := copier.Copy(&newSlack, &cfgSlack); err != nil {
+	newSettings := &gitlab.SlackService{}
+	if err := copier.Copy(&newSettings, &cfgSettings); err != nil {
 		return err
 	}
 
-	if err := mergo.Merge(newSlack.Properties, cfgSlack.Properties, mergo.WithOverride); err != nil {
+	if err := mergo.Merge(newSettings.Properties, cfgSettings.Properties, mergo.WithOverride); err != nil {
 		return err
 	}
-	newSlack.Active = cfgSlack.Active
+	newSettings.Active = cfgSettings.Active
 	// This is the service default so we set it to true here; consumers can set it to
 	// false via the config file if it should be disabled.
-	newSlack.Properties.NotifyOnlyBrokenPipelines = true
-	for _, e := range cfgSlack.Events {
+	newSettings.Properties.NotifyOnlyBrokenPipelines = true
+	for _, e := range cfgSettings.Events {
 		switch e {
 		case "issues":
-			newSlack.IssuesEvents = true
+			newSettings.IssuesEvents = true
 		case "merge_request":
-			newSlack.MergeRequestsEvents = true
+			newSettings.MergeRequestsEvents = true
 		case "pipeline":
-			newSlack.PipelineEvents = true
+			newSettings.PipelineEvents = true
 		case "push":
-			newSlack.PushEvents = true
+			newSettings.PushEvents = true
 		case "tags":
-			newSlack.TagPushEvents = true
+			newSettings.TagPushEvents = true
 		default:
 			fmt.Printf("Unsupported event type: %s\n", e)
 		}
@@ -67,14 +72,14 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 
 	// We need to set these even though they aren't use otherwise compareObjects
 	// will never return true.
-	newSlack.ID = projectSlack.ID
-	newSlack.Title = projectSlack.Title
-	newSlack.CreatedAt = projectSlack.CreatedAt
-	newSlack.UpdatedAt = projectSlack.UpdatedAt
+	newSettings.ID = projectSettings.ID
+	newSettings.Title = projectSettings.Title
+	newSettings.CreatedAt = projectSettings.CreatedAt
+	newSettings.UpdatedAt = projectSettings.UpdatedAt
 
 	// Return if our proposed config matches the actual config
-	if compareObjects(projectSlack, newSlack) {
-		fmt.Printf("Project %s's Slack settings doesn't need updating\n", p.Name)
+	if compareObjects(projectSettings, newSettings) {
+		fmt.Printf("Project %s's Slack settings don't need updating\n", p.Name)
 
 		return nil
 	}
@@ -88,12 +93,12 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 
 	opts := &gitlab.SetSlackServiceOptions{}
 
-	svcData, _ := json.Marshal(newSlack.Service)
+	svcData, _ := json.Marshal(newSettings.Service)
 	if err := json.Unmarshal(svcData, &opts); err != nil {
 		return err
 	}
 
-	propData, _ := json.Marshal(newSlack.Properties)
+	propData, _ := json.Marshal(newSettings.Properties)
 	if err := json.Unmarshal(propData, &opts); err != nil {
 		return err
 	}
