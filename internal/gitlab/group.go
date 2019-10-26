@@ -118,6 +118,11 @@ func UpdateProjectsInGroups(cfg *Config, dryRun bool) error {
 				if err := updateMergeRequestAppovalsSettings(client, p, cfg, dryRun); err != nil {
 					return err
 				}
+				// Repository settings
+				// - Protected Branch settings
+				if err := updateProtectedBranchesSettings(client, p, cfg, dryRun); err != nil {
+					return err
+				}
 				// Integrations
 				// - Update Slack integration
 				if err := updateSlackService(client, p, cfg, dryRun); err != nil {
