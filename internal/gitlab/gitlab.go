@@ -39,6 +39,9 @@ type Settings struct {
 	General struct {
 		MergeRequestApprovals gitlab.ProjectApprovals `json:"merge_request_approvals,omitempty"`
 	} `json:"general,omitempty"`
+	Repository struct {
+		ProtectedBranches []*ProtectedBranchSetting `json:"protected_branches,omitempty"`
+	} `json:"repository,omitempty"`
 	Integrations struct {
 		Slack SlackSettings `json:"slack,omitempty"`
 	} `json:"integrations,omitempty"`
@@ -75,7 +78,7 @@ func (c *Config) LoadCreds(token, url string) error {
 // for a project by looking up it's namespace in the config.
 func (c *Config) MergeRequestApprovalSettings(ns string) *gitlab.ProjectApprovals {
 	for {
-		// Loop through groups and return configured Slack Settings.
+		// Loop through groups and return configured settings if found.
 		for _, g := range c.Groups {
 			if strings.EqualFold(g.Name, ns) {
 				return &g.General.MergeRequestApprovals
@@ -90,8 +93,30 @@ func (c *Config) MergeRequestApprovalSettings(ns string) *gitlab.ProjectApproval
 		ns = strings.Join(s[:len(s)-1], "/")
 	}
 
-	// This should never happen as we only look up settings for projects
-	// we've already found.
+	// Return nil if we didn't find config for this setting.
+	return nil
+}
+
+// ProtectedBranchesSettings will return the Protected Branches settings
+// for a project by looking up it's namespace in the config.
+func (c *Config) ProtectedBranchesSettings(ns string) []*ProtectedBranchSetting {
+	for {
+		// Loop through groups and return configured settings if found.
+		for _, g := range c.Groups {
+			if strings.EqualFold(g.Name, ns) {
+				return g.Repository.ProtectedBranches
+			}
+		}
+
+		// Pop last name in namespace before trying again.
+		s := strings.Split(ns, "/")
+		if len(s) == 1 {
+			break
+		}
+		ns = strings.Join(s[:len(s)-1], "/")
+	}
+
+	// Return nil if we didn't find config for this setting.
 	return nil
 }
 
@@ -99,7 +124,7 @@ func (c *Config) MergeRequestApprovalSettings(ns string) *gitlab.ProjectApproval
 // it's namespace in the config.
 func (c *Config) SlackSettings(ns string) *SlackSettings {
 	for {
-		// Loop through groups and return configured Slack Settings.
+		// Loop through groups and return configured settings if found.
 		for _, g := range c.Groups {
 			if strings.EqualFold(g.Name, ns) {
 				return &g.Integrations.Slack
@@ -114,8 +139,7 @@ func (c *Config) SlackSettings(ns string) *SlackSettings {
 		ns = strings.Join(s[:len(s)-1], "/")
 	}
 
-	// This should never happen as we only look up settings for projects
-	// we've already found.
+	// Return nil if we didn't find config for this setting.
 	return nil
 }
 

@@ -16,6 +16,8 @@ Currently supported hosters:
     - [Project settings](#project-settings)
       - [General](#general)
         - [Merge Request Approvals](#merge-request-approvals)
+      - [Repository](#repository)
+        - [Protected Branches](#protected-branches)
     - [Project integrations](#project-integrations)
       - [Slack](#slack)
 - [Usage](#usage)
@@ -98,6 +100,24 @@ Example:
 general:
   mergerequestapprovals:
     approvalsbeforemerge: 2
+```
+
+##### Repository
+
+###### Protected Branches
+
+This section configures the "Protected Branches" options found under "Repository" settings.
+
+While multiple branches can defined, you can only set either `maintainers` or `developers` when determining who is allowed to push or merge changes.
+
+Example:
+
+```YAML
+repository:
+  protectedbranches:
+    - name: master
+      allowedtopush: maintainers
+      allowedtomerge: developers
 ```
 
 #### Project integrations
@@ -184,7 +204,7 @@ Have a configuration or feature you'd like to see supported? Create a pull reque
 
 ### GitLab
 
-* Branch protection
+* <s>Branch protection</s> ([#6](https://github.com/shoekstra/repo-settings/pull/6))
 * <s>Merge request approvals</s> ([#2](https://github.com/shoekstra/repo-settings/pull/2))
 * Merge request settings
 
