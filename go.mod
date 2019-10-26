@@ -1,4 +1,4 @@
-module github.com/shoekstra/repo-defaults
+module github.com/shoekstra/repo-settings
 
 go 1.12
 

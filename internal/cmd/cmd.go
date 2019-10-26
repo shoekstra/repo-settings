@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/shoekstra/repo-defaults/internal/config"
-	"github.com/shoekstra/repo-defaults/internal/gitlab"
+	"github.com/shoekstra/repo-settings/internal/config"
+	"github.com/shoekstra/repo-settings/internal/gitlab"
 	"github.com/spf13/cobra"
 )
 

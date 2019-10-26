@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/shoekstra/repo-defaults/internal/cmd"
+	"github.com/shoekstra/repo-settings/internal/cmd"
 )
 
 func main() {
