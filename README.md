@@ -108,7 +108,7 @@ general:
 
 This section configures the "Protected Branches" options found under "Repository" settings.
 
-While multiple branches can defined, you can only set either `maintainers` or `developers` when determining who is allowed to push or merge changes.
+While multiple branches can be defined, you may only set `maintainers`, `developers` or `no one` when determining who is allowed to push or merge changes; specifying group or user names is not supported at this time.
 
 Example:
 
