@@ -116,5 +116,9 @@ func setBranchAccess(s string) (gitlab.BranchAccessDescription, error) {
 		return gitlab.BranchAccessDescription{AccessLevel: 40, AccessLevelDescription: "Maintainers"}, nil
 	}
 
+	if strings.EqualFold(s, "no one") {
+		return gitlab.BranchAccessDescription{AccessLevel: 0, AccessLevelDescription: "No one"}, nil
+	}
+
 	return gitlab.BranchAccessDescription{}, fmt.Errorf("Invalid access type: %s", s)
 }
