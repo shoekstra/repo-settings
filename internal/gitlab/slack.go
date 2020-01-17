@@ -28,6 +28,12 @@ import (
 func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, dryRun bool) error {
 	// Fetch Slack Service settings from config file and return if a nil object is returned.
 	cfgSettings := cfg.SlackSettings(p.Namespace.FullPath)
+	// We don't error if no Slack settings are found for the namespace or a parent namespace, we just
+	// print a message and move on...
+	if cfgSettings == nil {
+		fmt.Printf("Cannot find Slack settings for namespace %s or any of it's parents, skipping\n", p.Namespace.FullPath)
+		return nil
+	}
 	if compareObjects(cfgSettings, &SlackSettings{}) {
 		return nil
 	}
