@@ -72,12 +72,12 @@ func updateProtectedBranchesSettings(client *gitlab.Client, p *gitlab.Project, c
 		}
 
 		if compareObjects(projectSetting, newSetting) {
-			fmt.Printf("Project %s's %s Branch Protection settings don't need updating\n", p.Name, projectSetting.Name)
+			fmt.Printf("Project %s's %s Branch Protection settings don't need updating\n", p.PathWithNamespace, projectSetting.Name)
 
 			return nil
 		}
 
-		fmt.Printf("Project %s's %s Branch Protection settings need updating ... ", p.Name, projectSetting.Name)
+		fmt.Printf("Project %s's %s Branch Protection settings need updating ... ", p.PathWithNamespace, projectSetting.Name)
 
 		if dryRun {
 			fmt.Printf("skipping because this is a dry run\n")

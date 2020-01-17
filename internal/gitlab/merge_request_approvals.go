@@ -56,12 +56,12 @@ func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project
 
 	// Return if our proposed config matches the actual config
 	if compareObjects(projectSettings, newSettings) {
-		fmt.Printf("Project %s's Merge Request Approval settings don't need updating\n", p.Name)
+		fmt.Printf("Project %s's Merge Request Approval settings don't need updating\n", p.PathWithNamespace)
 
 		return nil
 	}
 
-	fmt.Printf("Project %s's Merge Request Approval settings need updating ... ", p.Name)
+	fmt.Printf("Project %s's Merge Request Approval settings need updating ... ", p.PathWithNamespace)
 
 	if dryRun {
 		fmt.Printf("skipping because this is a dry run\n")
