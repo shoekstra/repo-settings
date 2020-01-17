@@ -98,7 +98,7 @@ func UpdateProjectsInGroups(cfg *Config, dryRun bool) error {
 		sort := "asc"
 		opt := &gitlab.ListGroupProjectsOptions{
 			ListOptions: gitlab.ListOptions{
-				PerPage: 10,
+				PerPage: 20,
 				Page:    1,
 			},
 			IncludeSubgroups: &includeSubGroups,
