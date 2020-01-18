@@ -25,7 +25,7 @@ import (
 	"github.com/xanzy/go-gitlab"
 )
 
-func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project, cfg *Config, dryRun bool) error {
+func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project, cfg *Config) error {
 	// Fetch Merge Request Approval settings from config file and return if a nil object is returned.
 	cfgSettings := cfg.MergeRequestApprovalSettings(p.Namespace.FullPath)
 	if compareObjects(cfgSettings, &gitlab.ProjectApprovals{}) {
@@ -63,7 +63,7 @@ func updateMergeRequestAppovalsSettings(client *gitlab.Client, p *gitlab.Project
 
 	fmt.Printf("Project %s's Merge Request Approval settings need updating ... ", p.PathWithNamespace)
 
-	if dryRun {
+	if cfg.DryRun {
 		fmt.Printf("skipping because this is a dry run\n")
 		return nil
 	}

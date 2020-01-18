@@ -76,9 +76,13 @@ func runCmd() error {
 			return err
 		}
 
+		if dryRun {
+			cfg.GitLab.DryRun = true
+		}
+
 		// Update projects in configured groups.
 		if cfg.GitLab.Groups != nil {
-			if err := gitlab.UpdateProjectsInGroups(cfg.GitLab, dryRun); err != nil {
+			if err := gitlab.UpdateProjectsInGroups(cfg.GitLab); err != nil {
 				return err
 			}
 		}
