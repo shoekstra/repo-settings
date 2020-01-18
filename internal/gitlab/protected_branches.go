@@ -29,7 +29,7 @@ type ProtectedBranchSetting struct {
 	AllowedToPush  string `json:"allowed_to_push,omitempty"`
 }
 
-func updateProtectedBranchesSettings(client *gitlab.Client, p *gitlab.Project, cfg *Config, dryRun bool) error {
+func updateProtectedBranchesSettings(client *gitlab.Client, p *gitlab.Project, cfg *Config) error {
 	// Fetch Protected Branches settings from config file and return if a nil object is returned.
 	cfgSettings := cfg.ProtectedBranchesSettings(p.Namespace.FullPath)
 	if cfgSettings == nil {
@@ -79,7 +79,7 @@ func updateProtectedBranchesSettings(client *gitlab.Client, p *gitlab.Project, c
 
 		fmt.Printf("Project %s's %s Branch Protection settings need updating ... ", p.PathWithNamespace, projectSetting.Name)
 
-		if dryRun {
+		if cfg.DryRun {
 			fmt.Printf("skipping because this is a dry run\n")
 			return nil
 		}

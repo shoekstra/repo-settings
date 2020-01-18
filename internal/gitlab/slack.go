@@ -25,7 +25,7 @@ import (
 	"github.com/xanzy/go-gitlab"
 )
 
-func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, dryRun bool) error {
+func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config) error {
 	// Fetch Slack Service settings from config file and return if a nil object is returned.
 	cfgSettings := cfg.SlackSettings(p.Namespace.FullPath)
 	// We don't error if no Slack settings are found for the namespace or a parent namespace, we just
@@ -91,7 +91,7 @@ func updateSlackService(client *gitlab.Client, p *gitlab.Project, cfg *Config, d
 
 	fmt.Printf("Project %s's Slack settings need updating ... ", p.PathWithNamespace)
 
-	if dryRun {
+	if cfg.DryRun {
 		fmt.Printf("skipping because this is a dry run\n")
 		return nil
 	}

@@ -31,6 +31,7 @@ type Config struct {
 	APIURL   *string     `json:"apiurl,omitempty"`
 	Defaults *Settings   `json:"defaults,omitempty"`
 	Groups   []*Settings `json:"groups,omitempty"`
+	DryRun   bool
 }
 
 // Settings represents a group's settings.

@@ -74,7 +74,7 @@ func listGroups(client *gitlab.Client) (Groups, error) {
 
 // UpdateProjectsInGroups is the entry point for this package and will update any projects
 // found within the groups defined in *Config.Groups.
-func UpdateProjectsInGroups(cfg *Config, dryRun bool) error {
+func UpdateProjectsInGroups(cfg *Config) error {
 	client, err := newClient(*cfg.APIToken, *cfg.APIURL)
 	if err != nil {
 		return err
@@ -115,17 +115,17 @@ func UpdateProjectsInGroups(cfg *Config, dryRun bool) error {
 			for _, p := range ps {
 				// General settings
 				// - Update Merge Request Approval settings
-				if err := updateMergeRequestAppovalsSettings(client, p, cfg, dryRun); err != nil {
+				if err := updateMergeRequestAppovalsSettings(client, p, cfg); err != nil {
 					return err
 				}
 				// Repository settings
 				// - Protected Branch settings
-				if err := updateProtectedBranchesSettings(client, p, cfg, dryRun); err != nil {
+				if err := updateProtectedBranchesSettings(client, p, cfg); err != nil {
 					return err
 				}
 				// Integrations
 				// - Update Slack integration
-				if err := updateSlackService(client, p, cfg, dryRun); err != nil {
+				if err := updateSlackService(client, p, cfg); err != nil {
 					return err
 				}
 			}
