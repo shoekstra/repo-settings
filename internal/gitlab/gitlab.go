@@ -21,6 +21,7 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"log"
 
 	"github.com/xanzy/go-gitlab"
 )
@@ -146,9 +147,9 @@ func (c *Config) SlackSettings(ns string) *SlackSettings {
 
 // newClient returns a configured GitLab client.
 func newClient(token, url string) (*gitlab.Client, error) {
-	client := gitlab.NewClient(nil, token)
-	if url != "" {
-		client.SetBaseURL(url)
+	client, err := gitlab.NewClient(token, gitlab.WithBaseURL(url))
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
 	}
 
 	return client, nil

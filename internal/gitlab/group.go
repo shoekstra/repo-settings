@@ -101,7 +101,7 @@ func UpdateProjectsInGroups(cfg *Config) error {
 				PerPage: 20,
 				Page:    1,
 			},
-			IncludeSubgroups: &includeSubGroups,
+			IncludeSubGroups: &includeSubGroups,
 			OrderBy:          &orderBy,
 			Sort:             &sort,
 		}
