@@ -15,12 +15,7 @@ checksum:
 snapshot:
   name_template: "{{ .ShortCommit }}"
 changelog:
-  use: github
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
+  skip: true
 release:
   draft: true
 dockers:
