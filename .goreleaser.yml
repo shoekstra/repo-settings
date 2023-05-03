@@ -1,0 +1,30 @@
+before:
+  hooks:
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .ShortCommit }}"
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+release:
+  draft: true
+dockers:
+  - dockerfile: Dockerfile.goreleaser
+    image_templates:
+      - "shoekstra/repo-settings:latest"
+      - "shoekstra/repo-settings:{{ .Tag }}"
