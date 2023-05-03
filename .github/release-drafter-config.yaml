@@ -19,6 +19,7 @@ categories:
       - 'documentation'
   - title: '🧺 Miscellaneous'
     labels:
+      - 'chore'
       - 'misc'
 
 version-resolver:
