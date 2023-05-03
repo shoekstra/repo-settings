@@ -40,7 +40,7 @@ func updateProtectedBranchesSettings(client *gitlab.Client, p *gitlab.Project, c
 	listOpts := &gitlab.ListProtectedBranchesOptions{
 		ListOptions: gitlab.ListOptions{
 			PerPage: 10,
-		  Page:    1,
+			Page:    1,
 		},
 	}
 	projectSettings, _, err := client.ProtectedBranches.ListProtectedBranches(p.ID, listOpts)
