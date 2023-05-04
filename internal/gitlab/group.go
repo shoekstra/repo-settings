@@ -93,6 +93,7 @@ func UpdateProjectsInGroups(cfg *Config) error {
 		}
 		fmt.Printf("matched group to ID %d\n", id)
 
+		archived := false
 		includeSubGroups := true
 		orderBy := "name"
 		sort := "asc"
@@ -101,6 +102,7 @@ func UpdateProjectsInGroups(cfg *Config) error {
 				PerPage: 20,
 				Page:    1,
 			},
+			Archived:         &archived,
 			IncludeSubGroups: &includeSubGroups,
 			OrderBy:          &orderBy,
 			Sort:             &sort,
