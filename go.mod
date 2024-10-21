@@ -9,5 +9,5 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/xanzy/go-gitlab v0.83.0
 	golang.org/x/oauth2 v0.7.0 // indirect
-	google.golang.org/protobuf v1.30.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 )
