@@ -95,7 +95,7 @@ func updateProtectedBranchesSettings(client *gitlab.Client, p *gitlab.Project, c
 		fmt.Printf("Updating project ... ")
 
 		_, err = client.ProtectedBranches.UnprotectRepositoryBranches(p.ID, *setOpts.Name)
-		if err != nil && gitlab.ErrNotFound.Error() != err.Error() {
+		if err != nil && err.Error() != gitlab.ErrNotFound.Error() {
 			fmt.Printf("Failed to unprotect branch: %s\n", err)
 			return nil
 		}
