@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/imdario/mergo v0.3.7
-	github.com/jinzhu/copier v0.0.0-20190625015134-976e0346caa8
+	github.com/jinzhu/copier v0.4.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.4.0
 	github.com/xanzy/go-gitlab v0.112.0
